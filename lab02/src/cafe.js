@@ -36,8 +36,8 @@ export function findItem(menu, id) {
 export function availableIn(menu, category) {
   // TODO
   return menu
-  .filter((i) => i.available && i.category === category)
-  .map((i) => i.name);
+    .filter((i) => i.available && i.category === category)
+    .map((i) => i.name);
 }
 
 // Task 5 — template literal + destructuring
@@ -61,7 +61,7 @@ export function withDiscount(i, percent) {
   const discountedPrice = Math.round(i.price * (1 - percent / 100));
   return {
     ...i,
-    price: discountedPrice
+    price: discountedPrice,
   };
 }
 
@@ -70,7 +70,10 @@ export function withDiscount(i, percent) {
 // Each line costs  (price of that menu item) × qty.
 // orderTotal(orders[0], menu) → 160   (2 × 45 + 1 × 70)
 export function orderTotal(order, menu) {
-  // TODO
+  return order.items.reduce((total, line) => {
+    const item = menu.find((menuItem) => menuItem.id === line.menuId);
+    return total + item.price * line.qty;
+  }, 0);
 }
 
 // Task 8 — map + reduce   (this is quiz Q10 again!)
@@ -78,6 +81,10 @@ export function orderTotal(order, menu) {
 // Return 0 when there are no orders.
 export function averageOrder(orders, menu) {
   // TODO
+  if (orders.length === 0) return 0;
+  const totals = orders.map((order) => orderTotal(order,menu));
+  const sum = totals.reduce((total, price) => total + price, 0);
+  return Number((sum / orders.length).toFixed(2));
 }
 
 // ───────────── Stretch (optional) ─────────────
