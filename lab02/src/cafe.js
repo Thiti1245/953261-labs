@@ -47,14 +47,22 @@ export function availableIn(menu, category) {
 // Hint: start with  const { name, price, available } = item;
 export function menuLine(item) {
   // TODO
+  const { name, price, available } = item;
+  const status = available ? "" : " (sold out)";
+  return `${name} — ${price} THB${status}`;
 }
 
 // Task 6 — spread
 // Return a NEW item with the price reduced by `percent`, rounded to a whole baht.
 // The original item must not change.
 // withDiscount({ ..., price: 45 }, 10) → { ..., price: 41 }   (45 × 0.9 = 40.5 → 41)
-export function withDiscount(item, percent) {
+export function withDiscount(i, percent) {
   // TODO
+  const discountedPrice = Math.round(i.price * (1 - percent / 100));
+  return {
+    ...i,
+    price: discountedPrice
+  };
 }
 
 // Task 7 — reduce + find
