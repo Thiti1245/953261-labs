@@ -92,10 +92,35 @@ export function averageOrder(orders, menu) {
 // Task 9 — return the NAME of the item with the highest total quantity sold.
 export function bestSeller(orders, menu) {
   // TODO
+  const line = orders.flatMap((order) => order.items);
+  const totals = line.reduce(
+    (acc, line) => ({
+      ...acc,
+      [line.menuId]: (acc[line.menuId] ?? 0) + line.qty,
+    }), 
+    {}
+  );
+  const best = Object.entries(totals).sort((a,b) => b[1] - a[1])[0];
+  return best ? findItem(menu, best[0]).name : undefined;
 }
 
 // Task 10 — group item names by category:
 // { drink: ["Thai Iced Tea", ...], food: [...], dessert: [...] }
 export function namesByCategory(menu) {
   // TODO
+  return menu.reduce(
+    (groups, { name, category }) => ({
+      ...groups,
+      [category]: [...(groups[category]??[]), name],
+    }),
+    {}
+  );
+}
+
+// Part D: My own function
+export function cheapDrinks(menu, maxPrice) {
+  return menu
+  .filter((item) => item.category === "drink" && item.available && item.price <= maxPrice)
+  .sort((a,b) => a.price - b.price)
+  .map((item) => ` ${item.name} - ${item.price} THB`);
 }
